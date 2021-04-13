@@ -16,7 +16,6 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
 
     public ReturnReview readReview(Long productId){
-
         List<Review> reviewList = reviewRepository.findByProductIdOrderByCreatedAt(productId);
 
         ReturnReview returnReview = new ReturnReview();

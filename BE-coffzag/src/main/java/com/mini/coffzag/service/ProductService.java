@@ -2,6 +2,7 @@ package com.mini.coffzag.service;
 
 import com.mini.coffzag.entity.Product;
 import com.mini.coffzag.repository.ProductRepository;
+import com.mini.coffzag.response.ReturnProduct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,17 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+//    public List<Product> getProducts() {
+//        return productRepository.findAll();
+//    }
+
+    public ReturnProduct getProducts() {
+        List<Product> productList = productRepository.findAll();
+
+        ReturnProduct returnProduct = new ReturnProduct();
+        returnProduct.setOk(true);
+        returnProduct.setResults(productList);
+        return returnProduct;
     }
 
     // review
