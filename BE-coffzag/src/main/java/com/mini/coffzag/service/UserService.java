@@ -6,6 +6,7 @@ import com.mini.coffzag.entity.Authority;
 import com.mini.coffzag.entity.User;
 import com.mini.coffzag.repository.UserRepository;
 import com.mini.coffzag.util.SecurityUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,14 +15,10 @@ import java.util.Collections;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Transactional
     public User signup(UserDto userDto) {
@@ -37,7 +34,7 @@ public class UserService {
         User user = User.builder()
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword()))
-//                .nickname(userDto.getNickname())
+                .email(userDto.getEmail())
                 .authorities(Collections.singleton(authority))
                 .activated(true)
                 .build();

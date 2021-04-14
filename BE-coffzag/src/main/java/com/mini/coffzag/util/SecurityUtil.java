@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class SecurityUtil {
 
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(SecurityUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
 
     private SecurityUtil() {
     }

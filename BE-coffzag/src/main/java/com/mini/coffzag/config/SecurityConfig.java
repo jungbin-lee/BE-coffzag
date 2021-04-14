@@ -7,6 +7,7 @@ import com.mini.coffzag.jwt.JwtSecurityConfig;
 import com.mini.coffzag.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -15,12 +16,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.CorsFilter;
 
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final CorsConfig corsConfig;
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -28,11 +29,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public SecurityConfig(
             TokenProvider tokenProvider,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler
+            JwtAccessDeniedHandler jwtAccessDeniedHandler,
+            CorsConfig corsConfig
     ) {
         this.tokenProvider = tokenProvider;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+        this.corsConfig = corsConfig;
     }
 
     @Bean
@@ -42,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring()
+        web
+                .ignoring()
                 .antMatchers(
                         "/h2-console/**"
                         ,"/favicon.ico"
@@ -51,9 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+    protected void configure(HttpSecurity http) throws Exception {
+        http
                 // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
+                .addFilter(corsConfig.corsFilter())
                 .csrf().disable()
 
                 .exceptionHandling()
@@ -74,9 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/**").permitAll()
-                .antMatchers("/api/authenticate").permitAll()
-                .antMatchers("/api/signup").permitAll()
-
+//                .antMatchers("/api/authenticate").permitAll()
+//                .antMatchers("/api/signup").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
