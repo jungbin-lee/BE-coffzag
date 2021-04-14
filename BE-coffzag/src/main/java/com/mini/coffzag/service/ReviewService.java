@@ -8,6 +8,7 @@ import com.mini.coffzag.response.ReturnReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +22,14 @@ public class ReviewService {
 
     public ReturnReview readReview(Long productId){
         List<Review> reviewList = reviewRepository.findByProductIdOrderByCreatedAt(productId);
-//        Product product = productRepository.findById(productId).orElseThrow(
-//                () -> new IllegalArgumentException()
-//        );
-        List<Product> productList = productRepository.findByCoffeeId(productId);
+
+        Product product = productRepository.findByCoffeeId(productId).orElseThrow(
+                () -> new IllegalArgumentException("상품 ID가 존재하지 않습니다.")
+        );
+
+//        List<Product> productList = productRepository.findByCoffeeId(productId);
+        List<Product> productList = new ArrayList<>();
+        productList.add(product);
 
         ReturnReview returnReview = new ReturnReview();
         returnReview.setOk(true);

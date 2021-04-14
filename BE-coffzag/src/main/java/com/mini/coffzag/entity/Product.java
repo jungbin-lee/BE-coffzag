@@ -35,4 +35,6 @@ public class Product {
 
     @Column(name = "coffee_brand", length = 255, nullable = false)
     private String coffeeBrand;
+
+
 }

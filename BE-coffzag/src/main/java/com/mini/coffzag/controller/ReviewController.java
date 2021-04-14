@@ -13,17 +13,16 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @GetMapping("/api/reviews/{productId}")
+//    @GetMapping("/api/reviews/{productId}")
+    @GetMapping("/api/details/{productId}")
     public ReturnReview readReview(@PathVariable Long productId){
         return reviewService.readReview(productId);
     }
 
-    @PostMapping("/api/reviews/{productId}") //댓글 단 사람 필요
+    @PostMapping("/api/details/{productId}") //댓글 단 사람 필요
     public void createReview(@PathVariable Long productId, @RequestBody Map<String, String> requestData){
         String contents = requestData.get("contents");
         reviewService.createReview(productId, contents);
     }
-
-
 
 }
