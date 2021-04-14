@@ -15,6 +15,11 @@ public class ProductController {
 
     private final ProductService productService;
 
+//    @GetMapping("/api/products")
+//    public List<Product> getProducts() {
+//        return productService.getProducts();
+//    }
+
     @GetMapping("/api/products")
     public ReturnProduct getProducts() {
         return productService.getProducts();
