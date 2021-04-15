@@ -1,5 +1,7 @@
 package com.mini.coffzag.controller;
 
+import com.mini.coffzag.dto.LoginDto;
+import com.mini.coffzag.dto.UserDto;
 import com.mini.coffzag.response.ReturnCheckId;
 import com.mini.coffzag.entity.User;
 import com.mini.coffzag.repository.UserRepository;
@@ -18,27 +20,20 @@ import java.util.Optional;
 @RestController
 public class UserController {
 
-    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserService userService;
 
-    // 회원가입
-    @PostMapping("/api/signup")
-    public Long join(@RequestBody Map<String, String> user) {
-        User newUser = User.builder()
-                .username(user.get("username"))
-                .password(passwordEncoder.encode(user.get("password")))
-                .email(user.get("email")).build();
-        userRepository.save(newUser);
-
-        return newUser.getUserId();
+@PostMapping("/api/signup")
+    public void createUser(@RequestBody UserDto userDto) {
+        User user = new User(userDto);
+        userRepository.save(user);
     }
 
     // ID 중복 체크
     @PostMapping("/api/signup/checkid")
-    public ReturnCheckId checkId(@RequestBody Map<String, String> user){
+    public ReturnCheckId checkId(@RequestBody UserDto userDto){
         ReturnCheckId returnCheckId = new ReturnCheckId();
-        Optional<User> member = userRepository.findByUsername(user.get("username"));
+        Optional<User> member = userRepository.findByUsername(userDto.getUsername());
         if(member.isPresent()){
             returnCheckId.setOk(false);
             returnCheckId.setMsg("중복된 ID가 존재합니다.");
@@ -51,7 +46,7 @@ public class UserController {
 
     // 로그인
     @PostMapping("/api/login")
-    public ReturnUser login(@RequestBody Map<String, String> user) {
-        return userService.login(user);
+    public ReturnUser login(@RequestBody LoginDto loginDto) {
+        return userService.login(loginDto);
     }
 }

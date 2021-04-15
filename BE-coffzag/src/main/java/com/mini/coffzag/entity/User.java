@@ -1,12 +1,15 @@
 package com.mini.coffzag.entity;
 
-import com.mini.coffzag.entity.Timestamped;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mini.coffzag.dto.LoginDto;
+import com.mini.coffzag.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -26,6 +29,7 @@ public class User extends Timestamped implements UserDetails {
     @Column(nullable = false, unique = true)
     private String username;
 
+    @JsonIgnore // pw json에서 숨김처리
     @Column(nullable = false)
     private String password;
 
@@ -60,5 +64,14 @@ public class User extends Timestamped implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Builder
+    public User(UserDto userDto) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        this.username = userDto.getUsername();
+        this.password = passwordEncoder.encode(userDto.getPassword());
+        this.email = userDto.getEmail();
     }
 }

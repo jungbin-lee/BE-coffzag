@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
@@ -24,6 +25,7 @@ public class JwtTokenProvider { // 토큰 생성, 검증
     private long tokenValidTime = 30*60*1000L;
     private final UserDetailsService userDetailsService;
 
+    @PostConstruct // 서버가 돌아가면 제일 먼저 실행시키는 어노테이션
     protected void init(){
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
