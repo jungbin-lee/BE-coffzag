@@ -20,14 +20,14 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
 
-    public ReturnReview readReview(Long productId){
-        List<Review> reviewList = reviewRepository.findByProductIdOrderByCreatedAt(productId);
+    //상품상세와 그에 따른 댓글 불러오기
+    public ReturnReview getDetailsWithReview(Long coffeeId){
+        List<Review> reviewList = reviewRepository.findByCoffeeIdOrderByCreatedAt(coffeeId);
 
-        Product product = productRepository.findByCoffeeId(productId).orElseThrow(
+        Product product = productRepository.findByCoffeeId(coffeeId).orElseThrow(
                 () -> new IllegalArgumentException("상품 ID가 존재하지 않습니다.")
         );
 
-//        List<Product> productList = productRepository.findByCoffeeId(productId);
         List<Product> productList = new ArrayList<>();
         productList.add(product);
 
@@ -38,9 +38,9 @@ public class ReviewService {
         return returnReview;
     }
 
-    public void createReview(Long productId, String contents){ //반환값 있게 할 지?
+    public void createReview(Long coffeeId, String contents){ //반환값 있게 할 지?
         Review review = new Review();
-        review.setProductId(productId);
+        review.setCoffeeId(coffeeId);
         review.setContents(contents);
         reviewRepository.save(review);
     }

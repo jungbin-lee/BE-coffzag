@@ -29,7 +29,7 @@ public class Review {
 //    @JoinColumn(name = "products_id")
 //    private Products products;
     @Column
-    private Long productId;
+    private Long coffeeId;
 
 
     @Column
