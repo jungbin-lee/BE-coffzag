@@ -9,6 +9,7 @@ import com.mini.coffzag.response.ReturnReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +43,15 @@ public class ReviewService {
     public void createReview(ReviewDto reviewDto){
         Review review = new Review(reviewDto);
         reviewRepository.save(review);
+    }
+
+    @Transactional
+    public void updateReview(Review review, ReviewDto reviewDto){
+        review.update(reviewDto);
+    }
+
+    public void deleteReview(Long reviewId){
+        reviewRepository.deleteById(reviewId);
     }
 
 }

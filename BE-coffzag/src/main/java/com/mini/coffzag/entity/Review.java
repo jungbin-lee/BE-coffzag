@@ -34,12 +34,18 @@ public class Review {
     @CreatedDate
     private LocalDateTime createdAt;
 
-//    @LastModifiedDate
-//    private LocalDateTime modifiedAt;
+    @LastModifiedDate
+    private LocalDateTime modifiedAt;
 
     public Review(ReviewDto reviewDto){
         this.coffeeId = reviewDto.getCoffeeId();
         this.username = reviewDto.getUsername();
+        this.contents = reviewDto.getContents();
+    }
+
+    public void update(ReviewDto reviewDto){
+//        this.coffeeId = reviewDto.getCoffeeId();
+//        this.username = reviewDto.getUsername();
         this.contents = reviewDto.getContents();
     }
 
