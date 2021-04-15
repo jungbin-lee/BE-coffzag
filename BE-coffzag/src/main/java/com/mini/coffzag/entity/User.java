@@ -1,44 +1,64 @@
 package com.mini.coffzag.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import com.mini.coffzag.entity.Timestamped;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
 
-@Entity
-@Table(name = "user") //이름을 넣기위한 어노테이
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class User {
-
-    @JsonIgnore
+@AllArgsConstructor
+@Builder
+@Entity
+//@Table(name = "USER")
+public class User extends Timestamped implements UserDetails {
     @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;// 프라이머리
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long userId;
 
-    @Column(name = "username", length = 50, unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @JsonIgnore
-    @Column(name = "password", length = 100)
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "email", length = 50)
+    @Column
     private String email;
 
-    @JsonIgnore
-    @Column(name = "activated")
-    private boolean activated; //활성화여부
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList();
+    }
 
-    @ManyToMany //일대다 다대일의 테이블을 조인시킨다.
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
-    private Set<Authority> authorities;
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

@@ -24,13 +24,14 @@ public class Review {
 //    @ManyToOne
 //    @JoinColumn
 //    private User user;
+    @Column
+    private String username;
 
 //    @ManyToOne
 //    @JoinColumn(name = "products_id")
 //    private Products products;
     @Column
     private Long coffeeId;
-
 
     @Column
     private String contents;

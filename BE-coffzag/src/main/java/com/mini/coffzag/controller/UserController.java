@@ -1,39 +1,57 @@
 package com.mini.coffzag.controller;
 
-
-import com.mini.coffzag.dto.UserDto;
+import com.mini.coffzag.response.ReturnCheckId;
 import com.mini.coffzag.entity.User;
+import com.mini.coffzag.repository.UserRepository;
+import com.mini.coffzag.response.ReturnUser;
 import com.mini.coffzag.service.UserService;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import java.util.Map;
+import java.util.Optional;
 
-import javax.validation.Valid;
-
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
 public class UserController {
+
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
     private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    // 회원가입
+    @PostMapping("/api/signup")
+    public Long join(@RequestBody Map<String, String> user) {
+        User newUser = User.builder()
+                .username(user.get("username"))
+                .password(passwordEncoder.encode(user.get("password")))
+                .email(user.get("email")).build();
+        userRepository.save(newUser);
+
+        return newUser.getUserId();
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<User> signup(@Valid @RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userService.signup(userDto));
+    // ID 중복 체크
+    @PostMapping("/api/signup/checkid")
+    public ReturnCheckId checkId(@RequestBody Map<String, String> user){
+        ReturnCheckId returnCheckId = new ReturnCheckId();
+        Optional<User> member = userRepository.findByUsername(user.get("username"));
+        if(member.isPresent()){
+            returnCheckId.setOk(false);
+            returnCheckId.setMsg("중복된 ID가 존재합니다.");
+        } else{
+            returnCheckId.setOk(true);
+            returnCheckId.setMsg("사용 가능한 ID 입니다.");
+        }
+        return returnCheckId;
     }
 
-    @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<User> getMyUserInfo() {
-        return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());
-    }
-
-    @GetMapping("/user/{username}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<User> getUserInfo(@PathVariable String username) {
-        return ResponseEntity.ok(userService.getUserWithAuthorities(username).get());
+    // 로그인
+    @PostMapping("/api/login")
+    public ReturnUser login(@RequestBody Map<String, String> user) {
+        return userService.login(user);
     }
 }

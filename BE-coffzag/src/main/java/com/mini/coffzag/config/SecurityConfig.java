@@ -1,46 +1,44 @@
 package com.mini.coffzag.config;
 
 
-import com.mini.coffzag.jwt.JwtAccessDeniedHandler;
-import com.mini.coffzag.jwt.JwtAuthenticationEntryPoint;
-import com.mini.coffzag.jwt.JwtSecurityConfig;
-import com.mini.coffzag.jwt.TokenProvider;
+import com.mini.coffzag.security.JwtAuthenticationFilter;
+import com.mini.coffzag.security.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
+//@Configuration
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final CorsConfig corsConfig;
-    private final TokenProvider tokenProvider;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    public SecurityConfig(
-            TokenProvider tokenProvider,
-            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler,
-            CorsConfig corsConfig
-    ) {
-        this.tokenProvider = tokenProvider;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-        this.corsConfig = corsConfig;
-    }
+    private final CorsConfig corsConfig;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
@@ -59,11 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
                 .addFilter(corsConfig.corsFilter())
+                .httpBasic().disable() // rest api 만을 고려하여 기본 설정은 해제하겠습니다.
                 .csrf().disable()
 
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .accessDeniedHandler(jwtAccessDeniedHandler)
 
                 // enable h2-console
                 .and()
@@ -73,7 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정
                 .and()
-                .sessionManagement()
+//                .sessionManagement()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 토큰 기반 인증이므로 세션 역시 사용하지 않습니다.
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
@@ -82,9 +80,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/images/**").permitAll()
 //                .antMatchers("/api/authenticate").permitAll()
 //                .antMatchers("/api/signup").permitAll()
-                .anyRequest().authenticated()
+//                .anyRequest().authenticated()
+                .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
 
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider));
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class);
+        // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+//                .apply(new JwtSecurityConfig(tokenProvider));
     }
 }
