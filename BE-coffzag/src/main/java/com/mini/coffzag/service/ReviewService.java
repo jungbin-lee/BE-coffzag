@@ -5,6 +5,7 @@ import com.mini.coffzag.entity.Product;
 import com.mini.coffzag.entity.Review;
 import com.mini.coffzag.repository.ProductRepository;
 import com.mini.coffzag.repository.ReviewRepository;
+import com.mini.coffzag.response.ReturnMsg;
 import com.mini.coffzag.response.ReturnReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,18 +41,27 @@ public class ReviewService {
         return returnReview;
     }
 
-    public void createReview(ReviewDto reviewDto){
+    public ReturnMsg createReview(ReviewDto reviewDto){
         Review review = new Review(reviewDto);
         reviewRepository.save(review);
+        ReturnMsg returnMsg = new ReturnMsg();
+        returnMsg.setMsg("리뷰 등록 완료");
+        return returnMsg;
     }
 
     @Transactional
-    public void updateReview(Review review, ReviewDto reviewDto){
+    public ReturnMsg updateReview(Review review, ReviewDto reviewDto){
         review.update(reviewDto);
+        ReturnMsg returnMsg = new ReturnMsg();
+        returnMsg.setMsg("리뷰 수정 완료");
+        return returnMsg;
     }
 
-    public void deleteReview(Long reviewId){
+    public ReturnMsg deleteReview(Long reviewId){
         reviewRepository.deleteById(reviewId);
+        ReturnMsg returnMsg = new ReturnMsg();
+        returnMsg.setMsg("리뷰 삭제 완료");
+        return returnMsg;
     }
 
 }
