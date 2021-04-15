@@ -1,5 +1,6 @@
 package com.mini.coffzag.service;
 
+import com.mini.coffzag.dto.ReviewDto;
 import com.mini.coffzag.entity.Product;
 import com.mini.coffzag.entity.Review;
 import com.mini.coffzag.repository.ProductRepository;
@@ -38,11 +39,9 @@ public class ReviewService {
         return returnReview;
     }
 
-    public void createReview(String username, Long coffeeId, String contents){ //반환값 있게 할 지?
-        Review review = new Review();
-        review.setUsername(username);
-        review.setCoffeeId(coffeeId);
-        review.setContents(contents);
+    public void createReview(ReviewDto reviewDto){
+        Review review = new Review(reviewDto);
         reviewRepository.save(review);
     }
+
 }
