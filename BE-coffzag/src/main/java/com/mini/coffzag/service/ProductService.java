@@ -5,7 +5,6 @@ import com.mini.coffzag.repository.ProductRepository;
 import com.mini.coffzag.response.ReturnProduct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -14,9 +13,28 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
+    //메인 페이지 모든 커피
     public ReturnProduct getProducts() {
         List<Product> productList = productRepository.findAll();
 
+        ReturnProduct returnProduct = new ReturnProduct();
+        returnProduct.setOk(true);
+        returnProduct.setProducts(productList);
+        return returnProduct;
+    }
+
+    //브랜드 별 커피
+    public ReturnProduct getBrand(String coffeeBrand){
+        List<Product> productList = productRepository.findByCoffeeBrand(coffeeBrand);
+        ReturnProduct returnProduct = new ReturnProduct();
+        returnProduct.setOk(true);
+        returnProduct.setProducts(productList);
+        return returnProduct;
+    }
+
+    //가격 낮은 순
+    public ReturnProduct getProductsByPriceAsc(){
+        List<Product> productList = productRepository.findAllByOrderByCoffeePriceAsc();
         ReturnProduct returnProduct = new ReturnProduct();
         returnProduct.setOk(true);
         returnProduct.setProducts(productList);

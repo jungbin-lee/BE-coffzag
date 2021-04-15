@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -41,6 +40,7 @@ public class ReviewService {
         return returnReview;
     }
 
+    //리뷰 등록
     public ReturnMsg createReview(ReviewDto reviewDto){
         Review review = new Review(reviewDto);
         reviewRepository.save(review);
@@ -49,6 +49,7 @@ public class ReviewService {
         return returnMsg;
     }
 
+    //리뷰 수정
     @Transactional
     public ReturnMsg updateReview(Review review, ReviewDto reviewDto){
         review.update(reviewDto);
@@ -57,6 +58,7 @@ public class ReviewService {
         return returnMsg;
     }
 
+    //리뷰 삭제
     public ReturnMsg deleteReview(Long reviewId){
         reviewRepository.deleteById(reviewId);
         ReturnMsg returnMsg = new ReturnMsg();

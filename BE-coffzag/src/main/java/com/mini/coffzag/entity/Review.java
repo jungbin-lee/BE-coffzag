@@ -44,8 +44,6 @@ public class Review {
     }
 
     public void update(ReviewDto reviewDto){
-//        this.coffeeId = reviewDto.getCoffeeId();
-//        this.username = reviewDto.getUsername();
         this.contents = reviewDto.getContents();
     }
 
