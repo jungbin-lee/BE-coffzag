@@ -1,7 +1,5 @@
 package com.mini.coffzag.service;
 
-
-
 import com.mini.coffzag.entity.User;
 import com.mini.coffzag.repository.UserRepository;
 import com.mini.coffzag.response.ReturnUser;
@@ -28,7 +26,7 @@ public class UserService {
                 throw new IllegalArgumentException("잘못된 비밀번호입니다.");
             }
             returnUser.setToken(jwtTokenProvider.createToken(member.getUsername()));
-            returnUser.setName(member.getUsername());
+            returnUser.setUsername(member.getUsername());
             return returnUser;
         } catch (IllegalArgumentException e) {
             returnUser.setMsg(e.getMessage());

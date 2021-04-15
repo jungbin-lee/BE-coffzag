@@ -19,17 +19,11 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     @Column(name = "review_id")
-    private Long id;
+    private Long reviewId;
 
-//    @ManyToOne
-//    @JoinColumn
-//    private User user;
     @Column
     private String username;
 
-//    @ManyToOne
-//    @JoinColumn(name = "products_id")
-//    private Products products;
     @Column
     private Long coffeeId;
 

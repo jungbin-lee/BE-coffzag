@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 public class ReturnUser {
     private String token;
-    private String name;
+    private String username;
     private String msg;
 }

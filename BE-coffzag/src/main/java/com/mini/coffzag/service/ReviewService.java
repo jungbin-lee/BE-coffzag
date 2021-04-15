@@ -38,8 +38,9 @@ public class ReviewService {
         return returnReview;
     }
 
-    public void createReview(Long coffeeId, String contents){ //반환값 있게 할 지?
+    public void createReview(String username, Long coffeeId, String contents){ //반환값 있게 할 지?
         Review review = new Review();
+        review.setUsername(username);
         review.setCoffeeId(coffeeId);
         review.setContents(contents);
         reviewRepository.save(review);

@@ -11,6 +11,5 @@ import java.util.List;
 @Getter
 public class ReturnProduct {
     private boolean ok;
-//    private List<Product> results = new ArrayList<>();
     private List<Product> products = new ArrayList<>();
 }
