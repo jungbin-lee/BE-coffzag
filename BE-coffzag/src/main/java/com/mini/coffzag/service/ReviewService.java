@@ -24,7 +24,7 @@ public class ReviewService {
 
     //상품상세와 그에 따른 댓글 불러오기
     public ReturnReview getDetailsWithReview(Long coffeeId){
-        List<Review> reviewList = reviewRepository.findByCoffeeIdOrderByCreatedAt(coffeeId);
+        List<Review> reviewList = reviewRepository.findByCoffeeIdOrderByModifiedAtDesc(coffeeId);
 
         Product product = productRepository.findByCoffeeId(coffeeId).orElseThrow(
                 () -> new IllegalArgumentException("상품 ID가 존재하지 않습니다.")
