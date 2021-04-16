@@ -1,43 +1,34 @@
 package com.mini.coffzag.entity;
 
-import com.mini.coffzag.dto.CartRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name ="cart")
-public class Cart extends Timestamped {
+@Table (name = "cart")
+public class Cart {
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    private Long cartid;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ID")
+    private Long cartId;
 
-    @ManyToOne
-    @JoinColumn(name ="product_productid")
-    private Product product;
+    @OneToMany
+    @JoinColumn(name = "CART_ID")
+    private List<Order> orderList;
 
-    @ManyToOne
-    @JoinColumn(name = "user_userid")
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private int count;
-
-    public Cart(Product product, User user, CartRequestDto cartRequestDto) {
-
-        this.product = product;
+    public Cart(User user) {
         this.user = user;
-        this.count = cartRequestDto.getCount();
     }
 
-    public void update(CartRequestDto cartRequestDto){
-        this.count = cartRequestDto.getCount();
-    }
 }

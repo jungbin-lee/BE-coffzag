@@ -4,8 +4,8 @@ import com.mini.coffzag.entity.Cart;
 import com.mini.coffzag.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface CartRepository extends JpaRepository <Cart, Long>{
-    List<Cart> findByUser(User user);
+public interface CartRepository extends JpaRepository<Cart, Long> {
+    Optional<Cart> findByUser(User userId);
 }

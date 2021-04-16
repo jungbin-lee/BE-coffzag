@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 public class Review extends Timestamped{
 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "review_id")
     private Long reviewId;

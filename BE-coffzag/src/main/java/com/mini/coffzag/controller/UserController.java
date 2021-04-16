@@ -2,6 +2,8 @@ package com.mini.coffzag.controller;
 
 import com.mini.coffzag.dto.LoginDto;
 import com.mini.coffzag.dto.UserDto;
+import com.mini.coffzag.entity.Cart;
+import com.mini.coffzag.repository.CartRepository;
 import com.mini.coffzag.response.ReturnCheckId;
 import com.mini.coffzag.entity.User;
 import com.mini.coffzag.repository.UserRepository;
@@ -20,11 +22,15 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final UserService userService;
+    private final CartRepository cartRepository;
 
-@PostMapping("/api/signup")
+    @PostMapping("/api/signup")
     public void createUser(@RequestBody UserDto userDto) {
         User user = new User(userDto);
         userRepository.save(user);
+
+        Cart cart = new Cart(user);
+        cartRepository.save(cart);
     }
 
     // ID 중복 체크
