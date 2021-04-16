@@ -51,11 +51,9 @@ public class ReviewService {
 
     //리뷰 수정
     @Transactional
-    public ReturnMsg updateReview(Review review, ReviewDto reviewDto){
+    public Review updateReview(Review review, ReviewDto reviewDto){
         review.update(reviewDto);
-        ReturnMsg returnMsg = new ReturnMsg();
-        returnMsg.setMsg("리뷰 수정 완료");
-        return returnMsg;
+        return review;
     }
 
     //리뷰 삭제

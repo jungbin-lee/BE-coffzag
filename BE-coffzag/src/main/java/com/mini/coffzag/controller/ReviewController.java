@@ -39,7 +39,7 @@ public class ReviewController {
 
     //리뷰 수정
     @PutMapping("/api/reviews/{reviewId}")
-    public ReturnMsg updateReview(@PathVariable Long reviewId, @RequestBody ReviewDto reviewDto, @AuthenticationPrincipal User user){
+    public Review updateReview(@PathVariable Long reviewId, @RequestBody ReviewDto reviewDto, @AuthenticationPrincipal User user){
         Review review = reviewRepository.findByReviewId(reviewId);
         if (!review.getUsername().equals(user.getUsername())) {
             throw new IllegalArgumentException("작성자만 수정할 수 있습니다");
