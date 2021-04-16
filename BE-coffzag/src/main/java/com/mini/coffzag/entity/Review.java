@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Review {
+public class Review extends Timestamped{
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -30,12 +30,6 @@ public class Review {
 
     @Column
     private String contents;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
 
     public Review(ReviewDto reviewDto){
         this.coffeeId = reviewDto.getCoffeeId();
