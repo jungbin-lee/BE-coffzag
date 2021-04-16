@@ -7,6 +7,8 @@ import com.mini.coffzag.repository.ReviewRepository;
 import com.mini.coffzag.response.ReturnProduct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,20 +21,19 @@ public class ProductService {
     //메인 페이지 모든 커피
     public ReturnProduct getProducts() {
         List<Product> productList = productRepository.findAll();
+        List<Review> reviewList = new ArrayList<>();
 
-//        for (Product product : productList){
-//            Long coffeeId = product.getCoffeeId();
-//            Review review = reviewRepository.findOneByCoffeeIdAndOrderByCreatedAtDesc(coffeeId);
-//            //coffeeId로 리뷰들을 찾고 생성시간이 가장 최근인 것 or coffeeId로 리뷰들을 찾고 reviewId가 가장 큰 것
-//            System.out.println(review.getCoffeeId());
-//            System.out.println(review.getReviewId());
-//            System.out.println(review.getUsername());
-//            System.out.println(review.getContents());
-//        }
+        for (Product product : productList){
+            Long coffeeId = product.getCoffeeId();
+            Review review = reviewRepository.findFirstByCoffeeIdOrderByModifiedAtDesc(coffeeId);
+            //coffeeId로 리뷰들을 찾고 생성시간이 가장 최근인 것
+            reviewList.add(review);
+        }
 
         ReturnProduct returnProduct = new ReturnProduct();
         returnProduct.setOk(true);
         returnProduct.setProducts(productList);
+        returnProduct.setReviews(reviewList);
         return returnProduct;
     }
 

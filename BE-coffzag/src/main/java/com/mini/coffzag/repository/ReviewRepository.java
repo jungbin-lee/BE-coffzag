@@ -8,5 +8,5 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByCoffeeIdOrderByModifiedAtDesc(Long coffeeId);
     Review findByReviewId(Long reviewId);
-//    Review findOneByCoffeeIdAndOrderByCreatedAtDesc(Long coffeeId);
+    Review findFirstByCoffeeIdOrderByModifiedAtDesc(Long coffeeId);
 }
