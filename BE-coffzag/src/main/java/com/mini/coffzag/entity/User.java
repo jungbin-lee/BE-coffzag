@@ -1,7 +1,6 @@
 package com.mini.coffzag.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mini.coffzag.dto.LoginDto;
 import com.mini.coffzag.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

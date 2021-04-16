@@ -6,7 +6,6 @@ import com.mini.coffzag.entity.User;
 import com.mini.coffzag.repository.ReviewRepository;
 import com.mini.coffzag.response.ReturnMsg;
 import com.mini.coffzag.response.ReturnReview;
-import com.mini.coffzag.security.JwtTokenProvider;
 import com.mini.coffzag.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +19,6 @@ public class ReviewController {
 
     private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
-    private final JwtTokenProvider jwtTokenProvider;
 
     //상세페이지 (커피 상세 + 리뷰)
     @GetMapping("/api/details/{coffeeId}")

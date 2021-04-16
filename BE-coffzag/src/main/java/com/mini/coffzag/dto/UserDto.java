@@ -1,6 +1,5 @@
 package com.mini.coffzag.dto;
 
-import com.mini.coffzag.entity.User;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;

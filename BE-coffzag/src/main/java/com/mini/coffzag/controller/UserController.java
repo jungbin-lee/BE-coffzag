@@ -8,12 +8,10 @@ import com.mini.coffzag.repository.UserRepository;
 import com.mini.coffzag.response.ReturnUser;
 import com.mini.coffzag.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor

@@ -1,18 +1,14 @@
 package com.mini.coffzag.service;
 
 import com.mini.coffzag.dto.LoginDto;
-import com.mini.coffzag.dto.UserDto;
 import com.mini.coffzag.entity.User;
 import com.mini.coffzag.repository.UserRepository;
 import com.mini.coffzag.response.ReturnUser;
 import com.mini.coffzag.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.Map;
 
 
 @Service
