@@ -1,5 +1,6 @@
 package com.mini.coffzag.entity;
 
+import com.mini.coffzag.dto.OrderRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,8 +18,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "coffee_id", nullable = false)
     @Column(name = "COFFEE_ID", nullable = false)
     private Long coffeeId;
 
@@ -35,9 +34,8 @@ public class Order {
         this.cart = cart;
     }
 
-    public void update(Long coffeeId, Long orderCnt) {
-        this.coffeeId = coffeeId;
-        this.orderCnt = orderCnt;
+    public void update(OrderRequestDto orderRequestDto) {
+        this.orderCnt = orderRequestDto.getOrderCnt();
     }
 
 }
