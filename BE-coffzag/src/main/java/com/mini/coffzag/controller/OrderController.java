@@ -3,6 +3,8 @@ package com.mini.coffzag.controller;
 import com.mini.coffzag.dto.OrderRequestDto;
 import com.mini.coffzag.entity.Order;
 import com.mini.coffzag.entity.User;
+import com.mini.coffzag.response.ReturnMsg;
+import com.mini.coffzag.response.ReturnOrder;
 import com.mini.coffzag.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,31 +19,28 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/api/order")
-    public List<Order> readOrder(@AuthenticationPrincipal User user) {
+    public ReturnOrder readOrder(@AuthenticationPrincipal User user) {
         return orderService.readOrder(user);
     }
 
     @PostMapping("/api/order/{coffeeId}")
-    public Order createOrder(@PathVariable Long coffeeId,
+    public ReturnOrder createOrder(@PathVariable Long coffeeId,
                          @RequestBody OrderRequestDto orderRequestDto,
                          @AuthenticationPrincipal User user) {
-
         return orderService.createOrder(coffeeId, orderRequestDto, user);
     }
 
     @PutMapping("/api/order/{coffeeId}")
-    public void updateOrder(@PathVariable Long coffeeId,
+    public ReturnMsg updateOrder(@PathVariable Long coffeeId,
                             @RequestBody OrderRequestDto orderRequestDto,
                             @AuthenticationPrincipal User user) {
-
-        orderService.updateOrder(coffeeId, orderRequestDto, user);
+        return orderService.updateOrder(coffeeId, orderRequestDto, user);
     }
 
     @DeleteMapping("/api/order/{coffeeId}")
-    public void deleteOrder(@PathVariable Long coffeeId,
-                            @AuthenticationPrincipal User user) {
-
-        orderService.deleteOrder(coffeeId, user);
+    public ReturnMsg deleteOrder(@PathVariable Long coffeeId,
+                                 @AuthenticationPrincipal User user) {
+        return orderService.deleteOrder(coffeeId, user);
     }
 
 }
