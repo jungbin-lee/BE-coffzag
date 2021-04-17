@@ -19,15 +19,14 @@ public class OrderController {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
 
-    @GetMapping("/api/order/{cartId}")
-    public List<Order> hello(@PathVariable Cart cartId) {
-        return orderRepository.findByCartId(cartId);
-    }
+    @GetMapping("/api/order")
+    public List<Order> hello(@AuthenticationPrincipal User user) {
+        Cart cart = cartRepository.findByUser(user).orElseThrow(
+                () -> new IllegalArgumentException("해당하는 장바구니가 없습니다.")
+        );
 
-//    @GetMapping("/api/order")
-//    public List<Order> hello() {
-//        return orderRepository.findAll();
-//    }
+        return cart.getOrderList();
+    }
 
 
     @PostMapping("/api/order/{coffeeId}")
@@ -35,21 +34,12 @@ public class OrderController {
                          @RequestBody OrderRequestDto orderRequestDto,
                          @AuthenticationPrincipal User user) {
 
-        System.out.println("user: " + user.getUserId());
-
         Cart cart = cartRepository.findByUser(user).orElseThrow(
                 () -> new NullPointerException("해당하는 사용자 또는 장바구니가 없습니다.")
         );
 
-        System.out.println("cart: " + cart.getCartId());
-
         Order order = new Order(coffeeId, orderRequestDto.getOrderCnt());
-
-        System.out.println(order);
-
         cart.getOrderList().add(order);
-
-        System.out.println(order);
 
         orderRepository.save(order);
     }
