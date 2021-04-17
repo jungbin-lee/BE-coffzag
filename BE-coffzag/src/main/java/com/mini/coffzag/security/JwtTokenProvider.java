@@ -22,7 +22,7 @@ public class JwtTokenProvider { // 토큰 생성, 검증
 
     private String secretKey = "ABCA7D35A0B04018B865E0817E1A41374FB06737CF00641E2A781F631B61C9AC";
 
-    private long tokenValidTime = 30*60*1000L;
+    private long tokenValidTime = 30*60*1000L; // token 발급 후 유효시간 30분
     private final UserDetailsService userDetailsService;
 
     @PostConstruct // 서버가 돌아가면 제일 먼저 실행시키는 어노테이션

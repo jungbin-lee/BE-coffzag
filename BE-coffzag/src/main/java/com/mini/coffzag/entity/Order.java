@@ -25,7 +25,16 @@ public class Order {
     @Column(name = "ORDER_CNT", nullable = false)
     private Long orderCnt;
 
+    @ManyToOne
+    @JoinColumn(name = "CART_ID")
+    private Cart cartId;
+
     public Order(Long coffeeId, Long orderCnt) {
+        this.coffeeId = coffeeId;
+        this.orderCnt = orderCnt;
+    }
+
+    public void update(Long coffeeId, Long orderCnt) {
         this.coffeeId = coffeeId;
         this.orderCnt = orderCnt;
     }
