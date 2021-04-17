@@ -25,9 +25,8 @@ public class OrderController {
                 () -> new IllegalArgumentException("해당하는 장바구니가 없습니다.")
         );
 
-        return cart.getOrderList();
+        return orderRepository.findByCart(cart);
     }
-
 
     @PostMapping("/api/order/{coffeeId}")
     public void addOrder(@PathVariable Long coffeeId,
@@ -38,29 +37,14 @@ public class OrderController {
                 () -> new NullPointerException("해당하는 사용자 또는 장바구니가 없습니다.")
         );
 
-        Order order = new Order(coffeeId, orderRequestDto.getOrderCnt());
-        cart.getOrderList().add(order);
+        Order order = new Order(coffeeId, orderRequestDto.getOrderCnt(), cart);
+//        cart.getOrderList().add(order);
 
         orderRepository.save(order);
     }
 
-    @PutMapping("/api/order/{coffeeId}")
-    public void modifyOrder(@PathVariable Long coffeeId,
-                            @RequestBody OrderRequestDto orderRequestDto,
-                            @AuthenticationPrincipal User user) {
-
-        Cart cart = cartRepository.findByUser(user).orElseThrow(
-                () -> new NullPointerException("해당하는 사용자 또는 장바구니가 없습니다.")
-        );
-
-        System.out.println(cart.getCartId());
-
-//        Order order = orderRepository.findByCartId(cart.getCartId()).orElseThrow(
-//                () -> new NullPointerException("해당하는 Order가 없습니다.")
-//        );
+//    @PutMapping("/api/order/{coffeeId}") {
 //
-//        order.update(coffeeId, orderRequestDto.getOrderCnt());
-
-    }
+//    }
 
 }

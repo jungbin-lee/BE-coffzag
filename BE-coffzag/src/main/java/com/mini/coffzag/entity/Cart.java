@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,10 +17,6 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private Long cartId;
-
-    @OneToMany
-    @JoinColumn(name = "CART_ID")
-    private List<Order> orderList;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID", nullable = false)

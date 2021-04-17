@@ -27,11 +27,12 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "CART_ID")
-    private Cart cartId;
+    private Cart cart;
 
-    public Order(Long coffeeId, Long orderCnt) {
+    public Order(Long coffeeId, Long orderCnt, Cart cart) {
         this.coffeeId = coffeeId;
         this.orderCnt = orderCnt;
+        this.cart = cart;
     }
 
     public void update(Long coffeeId, Long orderCnt) {
