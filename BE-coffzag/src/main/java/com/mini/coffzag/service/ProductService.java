@@ -40,9 +40,19 @@ public class ProductService {
     //브랜드 별 커피
     public ReturnProduct getBrand(String coffeeBrand){
         List<Product> productList = productRepository.findByCoffeeBrand(coffeeBrand);
+        List<Review> reviewList = new ArrayList<>();
+
+        for (Product product : productList){
+            Long coffeeId = product.getCoffeeId();
+            Review review = reviewRepository.findFirstByCoffeeIdOrderByModifiedAtDesc(coffeeId);
+            //coffeeId로 리뷰들을 찾고 생성시간이 가장 최근인 것
+            reviewList.add(review);
+        }
+
         ReturnProduct returnProduct = new ReturnProduct();
         returnProduct.setOk(true);
         returnProduct.setProducts(productList);
+        returnProduct.setReviews(reviewList);
         return returnProduct;
     }
 
