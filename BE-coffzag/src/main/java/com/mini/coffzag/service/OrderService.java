@@ -30,64 +30,87 @@ public class OrderService {
                 () -> new IllegalArgumentException("해당하는 장바구니가 없습니다.")
         );
 
-        ReturnOrder returnOrder = new ReturnOrder();
         List<Order> orderList = orderRepository.findByCart(cart);
-        returnOrder.setOrderList(orderList);
-        returnOrder.setOk(true);
+
+        ReturnMsg returnMsg = new ReturnMsg("해당 사용자의 장바구니에서 모든 상품을 조회했습니다.");
+        ReturnOrder returnOrder = new ReturnOrder(true, orderList, returnMsg);
 
         return returnOrder;
     }
 
     @Transactional
     public ReturnOrder createOrder(Long coffeeId, OrderRequestDto orderRequestDto, User user) {
+        Product coffee = productRepository.findByCoffeeId(coffeeId).orElseThrow(
+                () -> new IllegalArgumentException("해당하는 커피 캡슐이 없습니다.")
+        );
+
         Cart cart = cartRepository.findByUser(user).orElseThrow(
                 () -> new NullPointerException("해당하는 사용자 또는 장바구니가 없습니다.")
         );
 
-        Order order = new Order(coffeeId, orderRequestDto.getOrderCnt(), cart);
+        List<Order> orderList = orderRepository.findByCart(cart);
+        for (Order order : orderList) {
+            if (order.getCoffee().getCoffeeId().equals(coffeeId)) {
+                OrderRequestDto updateCnt = new OrderRequestDto(orderRequestDto.getOrderCnt() + order.getOrderCnt());
+                order.update(updateCnt);
+
+                ReturnMsg returnMsg = new ReturnMsg("[수정 완료] 해당 상품의 개수를 " + updateCnt.getOrderCnt() + "개로 변경하였습니다.");
+                ReturnOrder returnOrder = new ReturnOrder(true, order, returnMsg);
+
+                return returnOrder;
+            }
+        }
+
+        Order order = new Order(coffee, orderRequestDto.getOrderCnt(), cart);
         orderRepository.save(order);
 
-        ReturnOrder returnOrder = new ReturnOrder();
-        List<Order> orderList = orderRepository.findByCart(cart);
-        returnOrder.setOrderList(orderList);
-        returnOrder.setOk(true);
+        ReturnMsg returnMsg = new ReturnMsg("해당 상품을 장바구니에 추가했습니다.");
+        ReturnOrder returnOrder = new ReturnOrder(true, order, returnMsg);
 
         return returnOrder;
     }
 
+
     //장바구니에서 상품 변경
     @Transactional
-    public ReturnMsg updateOrder(Long coffeeId, OrderRequestDto orderRequestDto, User user) {
+    public ReturnOrder updateOrder(Long coffeeId, OrderRequestDto orderRequestDto, User user) {
+        Product coffee = productRepository.findByCoffeeId(coffeeId).orElseThrow(
+                () -> new IllegalArgumentException("해당하는 커피 캡슐이 없습니다.")
+        );
+
         Cart cart = cartRepository.findByUser(user).orElseThrow(
                 () -> new NullPointerException("해당하는 장바구니가 없습니다.")
         );
 
-        Order getOrder = orderRepository.findByCoffeeIdAndCart(coffeeId, cart).orElseThrow(
+        Order getOrder = orderRepository.findByCoffeeAndCart(coffee, cart).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 상품이 장바구니에 없습니다.")
         );
 
         getOrder.update(orderRequestDto);
 
-        ReturnMsg returnMsg = new ReturnMsg();
-        returnMsg.setMsg("[수정 완료] 해당 상품의 개수를 " + orderRequestDto.getOrderCnt() + "개로 변경하였습니다.");
+        ReturnMsg returnMsg = new ReturnMsg("[수정 완료] 해당 상품의 개수를 " + orderRequestDto.getOrderCnt() + "개로 변경하였습니다.");
+        ReturnOrder returnOrder = new ReturnOrder(true, getOrder, returnMsg);
 
-        return returnMsg;
+        return returnOrder;
     }
 
     @Transactional
     public ReturnMsg deleteOrder(Long coffeeId, User user) {
+        Product coffee = productRepository.findByCoffeeId(coffeeId).orElseThrow(
+                () -> new IllegalArgumentException("해당하는 커피 캡슐이 없습니다.")
+        );
+
         Cart cart = cartRepository.findByUser(user).orElseThrow(
                 () -> new NullPointerException("해당하는 사용자 또는 장바구니가 없습니다.")
         );
 
-        Order getOrder = orderRepository.findByCoffeeIdAndCart(coffeeId, cart).orElseThrow(
+        Order getOrder = orderRepository.findByCoffeeAndCart(coffee, cart).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 상품이 장바구니에 없습니다.")
         );
 
         orderRepository.delete(getOrder);
 
-        ReturnMsg returnMsg = new ReturnMsg();
-        returnMsg.setMsg("[삭제 완료] 장바구니에서 해당 상품을 삭제하였습니다.");
+        ReturnMsg returnMsg = new ReturnMsg("[삭제 완료] 장바구니에서 해당 상품을 삭제하였습니다.");
 
         return returnMsg;
     }

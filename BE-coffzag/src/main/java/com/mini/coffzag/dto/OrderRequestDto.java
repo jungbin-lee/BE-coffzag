@@ -11,4 +11,7 @@ public class OrderRequestDto {
 
     private Long orderCnt;
 
+    public OrderRequestDto(Long orderCnt) {
+        this.orderCnt = orderCnt;
+    }
 }

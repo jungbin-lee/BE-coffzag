@@ -18,26 +18,26 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/api/order")
+    @GetMapping("/api/orders")
     public ReturnOrder readOrder(@AuthenticationPrincipal User user) {
         return orderService.readOrder(user);
     }
 
-    @PostMapping("/api/order/{coffeeId}")
+    @PostMapping("/api/orders/{coffeeId}")
     public ReturnOrder createOrder(@PathVariable Long coffeeId,
                          @RequestBody OrderRequestDto orderRequestDto,
                          @AuthenticationPrincipal User user) {
         return orderService.createOrder(coffeeId, orderRequestDto, user);
     }
 
-    @PutMapping("/api/order/{coffeeId}")
-    public ReturnMsg updateOrder(@PathVariable Long coffeeId,
+    @PutMapping("/api/orders/{coffeeId}")
+    public ReturnOrder updateOrder(@PathVariable Long coffeeId,
                             @RequestBody OrderRequestDto orderRequestDto,
                             @AuthenticationPrincipal User user) {
         return orderService.updateOrder(coffeeId, orderRequestDto, user);
     }
 
-    @DeleteMapping("/api/order/{coffeeId}")
+    @DeleteMapping("/api/orders/{coffeeId}")
     public ReturnMsg deleteOrder(@PathVariable Long coffeeId,
                                  @AuthenticationPrincipal User user) {
         return orderService.deleteOrder(coffeeId, user);

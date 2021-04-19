@@ -18,8 +18,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long orderId;
 
-    @Column(name = "COFFEE_ID", nullable = false)
-    private Long coffeeId;
+    @ManyToOne
+    @JoinColumn(name = "COFFEE_ID")
+    private Product coffee;
 
     @Column(name = "ORDER_CNT", nullable = false)
     private Long orderCnt;
@@ -28,8 +29,8 @@ public class Order {
     @JoinColumn(name = "CART_ID")
     private Cart cart;
 
-    public Order(Long coffeeId, Long orderCnt, Cart cart) {
-        this.coffeeId = coffeeId;
+    public Order(Product coffee, Long orderCnt, Cart cart) {
+        this.coffee = coffee;
         this.orderCnt = orderCnt;
         this.cart = cart;
     }
