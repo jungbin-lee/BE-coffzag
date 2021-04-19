@@ -3,9 +3,9 @@ package com.mini.coffzag.service;
 import com.mini.coffzag.dto.ReviewDto;
 import com.mini.coffzag.entity.Product;
 import com.mini.coffzag.entity.Review;
+import com.mini.coffzag.entity.User;
 import com.mini.coffzag.repository.ProductRepository;
 import com.mini.coffzag.repository.ReviewRepository;
-import com.mini.coffzag.response.ReturnMsg;
 import com.mini.coffzag.response.ReturnReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,25 +41,39 @@ public class ReviewService {
     }
 
     //리뷰 등록
-    public ReturnMsg createReview(ReviewDto reviewDto){
+    public ReturnReview createReview(User user, Long coffeeId, ReviewDto reviewDto){
+        String username = user.getUsername();
+        reviewDto.setUsername(username);
+        reviewDto.setCoffeeId(coffeeId);
         Review review = new Review(reviewDto);
+
         reviewRepository.save(review);
-        ReturnMsg returnMsg = new ReturnMsg();
+        ReturnReview returnMsg = new ReturnReview();
+        returnMsg.setOk(true);
         returnMsg.setMsg("리뷰 등록 완료");
         return returnMsg;
     }
 
     //리뷰 수정
     @Transactional
-    public Review updateReview(Review review, ReviewDto reviewDto){
+    public Review updateReview(Long reviewId, User user, ReviewDto reviewDto){
+        Review review = reviewRepository.findByReviewId(reviewId);
+        if (!review.getUsername().equals(user.getUsername())) {
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다");
+        }
         review.update(reviewDto);
         return review;
     }
 
     //리뷰 삭제
-    public ReturnMsg deleteReview(Long reviewId){
+    public ReturnReview deleteReview(Long reviewId, User user){
+        Review review = reviewRepository.findByReviewId(reviewId);
+        if (!review.getUsername().equals(user.getUsername())){
+            throw new IllegalArgumentException("작성자만 삭제할 수 있습니다");
+        }
         reviewRepository.deleteById(reviewId);
-        ReturnMsg returnMsg = new ReturnMsg();
+        ReturnReview returnMsg = new ReturnReview();
+        returnMsg.setOk(true);
         returnMsg.setMsg("리뷰 삭제 완료");
         return returnMsg;
     }

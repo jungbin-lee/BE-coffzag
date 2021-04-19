@@ -24,6 +24,7 @@ public class UserController {
     private final UserService userService;
     private final CartRepository cartRepository;
 
+
     @PostMapping("/api/signup")
     public void createUser(@RequestBody UserDto userDto) {
         User user = new User(userDto);
@@ -31,6 +32,7 @@ public class UserController {
 
         Cart cart = new Cart(user);
         cartRepository.save(cart);
+
     }
 
     // ID 중복 체크

@@ -55,6 +55,7 @@ public class OrderService {
         return returnOrder;
     }
 
+    //장바구니에서 상품 변경
     @Transactional
     public ReturnMsg updateOrder(Long coffeeId, OrderRequestDto orderRequestDto, User user) {
         Cart cart = cartRepository.findByUser(user).orElseThrow(

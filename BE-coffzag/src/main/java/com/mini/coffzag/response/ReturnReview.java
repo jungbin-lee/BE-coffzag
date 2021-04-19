@@ -14,4 +14,5 @@ public class ReturnReview {
     private boolean ok;
     private List<Product> products = new ArrayList<>();
     private List<Review> reviews = new ArrayList<>();
+    private String msg;
 }
