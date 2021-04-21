@@ -1,13 +1,10 @@
 package com.mini.coffzag.entity;
 
-import com.mini.coffzag.dto.MyProductRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Getter
@@ -17,28 +14,21 @@ import java.util.List;
 @Table (name = "myproducts")
 public class MyProduct {
     @Id
-    @Column(name = "myproduct_id")
+    @Column(name = "MYPRODUCT_ID")
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private Long myproductId;
+    private Long myProductId;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "coffee_id")
-    private Product coffeeId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "PRODUCT_ID")
+    private Product product;
 
-
-
-    public MyProduct(Product coffeeId, User user, MyProductRequestDto productDto){
-
+    public MyProduct(Product product, User user){
         this.user = user;
-        this.coffeeId =coffeeId;
-
-
+        this.product = product;
     }
-
-
 
 }
