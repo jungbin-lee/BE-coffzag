@@ -1,5 +1,6 @@
 package com.mini.coffzag.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mini.coffzag.dto.OrderRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

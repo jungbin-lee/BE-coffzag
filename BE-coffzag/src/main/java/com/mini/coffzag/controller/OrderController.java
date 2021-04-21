@@ -1,7 +1,6 @@
 package com.mini.coffzag.controller;
 
 import com.mini.coffzag.dto.OrderRequestDto;
-import com.mini.coffzag.entity.Order;
 import com.mini.coffzag.entity.User;
 import com.mini.coffzag.response.ReturnMsg;
 import com.mini.coffzag.response.ReturnOrder;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
