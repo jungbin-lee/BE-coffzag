@@ -20,15 +20,15 @@ public class Order {
     private Long orderId;
 
     @ManyToOne
+    @JoinColumn(name = "CART_ID")
+    private Cart cart;
+
+    @ManyToOne
     @JoinColumn(name = "COFFEE_ID")
     private Product coffee;
 
     @Column(name = "ORDER_CNT", nullable = false)
     private Long orderCnt;
-
-    @ManyToOne
-    @JoinColumn(name = "CART_ID")
-    private Cart cart;
 
     public Order(Product coffee, Long orderCnt, Cart cart) {
         this.coffee = coffee;
@@ -39,5 +39,6 @@ public class Order {
     public void update(OrderRequestDto orderRequestDto) {
         this.orderCnt = orderRequestDto.getOrderCnt();
     }
+
 
 }

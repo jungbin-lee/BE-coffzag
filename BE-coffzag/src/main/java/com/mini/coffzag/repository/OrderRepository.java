@@ -11,6 +11,4 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByCart(Cart cart);
     Optional<Order> findByCoffeeAndCart(Product coffee, Cart cart);
-    //Optional<Order> findByCoffee(Product coffee);
-
 }

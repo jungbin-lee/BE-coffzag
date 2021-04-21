@@ -3,11 +3,13 @@ package com.mini.coffzag.response;
 import com.mini.coffzag.entity.Product;
 import com.mini.coffzag.entity.Review;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Setter
 @Getter
@@ -97,4 +99,28 @@ public class ReturnProduct {
 //        }
 //    };
     private List<Review> reviews = new ArrayList<>();
+    private Product oneProduct;
+
+    public ReturnProduct(boolean ok, Page<Product> product, List<Review> reviews) {
+        this.ok = ok;
+        this.product = product;
+        this.reviews = reviews;
+    }
+
+    public ReturnProduct(boolean ok, List<Product> products, List<Review> reviews) {
+        this.ok = ok;
+        this.products = products;
+        this.reviews = reviews;
+    }
+
+    public ReturnProduct(boolean ok, List<Product> products) {
+        this.ok = ok;
+        this.products = products;
+    }
+
+    public ReturnProduct(boolean ok, Product oneProduct) {
+        this.ok = ok;
+        this.oneProduct = oneProduct;
+    }
+
 }

@@ -24,6 +24,7 @@ public class OrderService {
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
 
+    // 로그인한 user의 장바구니에서 모든 order 조회
     @Transactional
     public ReturnOrder readOrder(User user) {
         Cart cart = cartRepository.findByUser(user).orElseThrow(
@@ -38,6 +39,7 @@ public class OrderService {
         return returnOrder;
     }
 
+    // 로그인한 user의 장바구니에 새로운 order 추가
     @Transactional
     public ReturnOrder createOrder(Long coffeeId, OrderRequestDto orderRequestDto, User user) {
         Product coffee = productRepository.findByCoffeeId(coffeeId).orElseThrow(
@@ -61,17 +63,17 @@ public class OrderService {
             }
         }
 
-        Order order = new Order(coffee, orderRequestDto.getOrderCnt(), cart);
-        orderRepository.save(order);
+        Order newOrder = new Order(coffee, orderRequestDto.getOrderCnt(), cart);
+        orderRepository.save(newOrder);
 
         ReturnMsg returnMsg = new ReturnMsg("해당 상품을 장바구니에 추가했습니다.");
-        ReturnOrder returnOrder = new ReturnOrder(true, order, returnMsg);
+        ReturnOrder returnOrder = new ReturnOrder(true, newOrder, returnMsg);
 
         return returnOrder;
     }
 
 
-    //장바구니에서 상품 변경
+    // 로그인한 user의 장바구니에서 특정 order(상품)의 orderCnt(수량) 변경
     @Transactional
     public ReturnOrder updateOrder(Long coffeeId, OrderRequestDto orderRequestDto, User user) {
         Product coffee = productRepository.findByCoffeeId(coffeeId).orElseThrow(
@@ -94,6 +96,7 @@ public class OrderService {
         return returnOrder;
     }
 
+    // 로그인한 user의 장바구니에서 특정 order 삭제
     @Transactional
     public ReturnMsg deleteOrder(Long coffeeId, User user) {
         Product coffee = productRepository.findByCoffeeId(coffeeId).orElseThrow(

@@ -37,12 +37,14 @@ public class ProductController {
     }
 
     //가격 낮은 순
-    @GetMapping("api/products/price")
+    @GetMapping("/api/products/price")
     public ReturnProduct getProductsByPriceAsc(){
         return productService.getProductsByPriceAsc();
     }
 
-
-
+    @GetMapping("/api/products/payments/{productId}")
+    public ReturnProduct getOneProduct(@PathVariable Long productId) {
+        return productService.getOneProduct(productId);
+    }
 
 }
