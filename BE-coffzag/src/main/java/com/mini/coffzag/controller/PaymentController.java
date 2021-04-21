@@ -27,7 +27,7 @@ public class PaymentController {
         return paymentService.createPayment(paymentRequestDto, user);
     }
 
-    @DeleteMapping("/api/payments")
+    @DeleteMapping("/api/payments/orderList")
     public ReturnMsg deleteOrderList(@AuthenticationPrincipal User user) {
         return paymentService.deleteOrderList(user);
     }
