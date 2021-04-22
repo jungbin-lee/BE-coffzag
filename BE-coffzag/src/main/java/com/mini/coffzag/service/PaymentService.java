@@ -55,6 +55,7 @@ public class PaymentService {
         paymentRepository.save(newPayment);
 
         ReturnMsg returnMsg = new ReturnMsg("결제 내역을 성공적으로 저장하였습니다.");
+        deleteOrderList(user);
         return returnMsg;
     }
 
