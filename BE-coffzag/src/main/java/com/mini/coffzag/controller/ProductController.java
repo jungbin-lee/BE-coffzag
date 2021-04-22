@@ -24,12 +24,6 @@ public class ProductController {
         return productService.getProducts(page, size);
     }
 
-//    메인페이지 모든 커피
-//    @GetMapping("/api/products")
-//    public ReturnProduct getProducts() {
-//        return productService.getProducts();
-//    }
-
     //브랜드별 커피
     @GetMapping("/api/products/{coffeeBrand}")
     public ReturnProduct getBrand(@PathVariable String coffeeBrand){
@@ -42,9 +36,5 @@ public class ProductController {
         return productService.getProductsByPriceAsc();
     }
 
-    @GetMapping("/api/products/payments/{productId}")
-    public ReturnProduct getOneProduct(@PathVariable Long productId) {
-        return productService.getOneProduct(productId);
-    }
 
 }

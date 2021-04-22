@@ -45,6 +45,8 @@ public class PaymentService {
 
         List<Order> orderList = orderRepository.findByCart(cart);
         List<Long> productInfo = new ArrayList<>();
+        //List<Product> coffeeList = new ArrayList<>();
+
         for (Order order : orderList) {
             Long coffeeId = order.getCoffee().getCoffeeId();
             productInfo.add(coffeeId);

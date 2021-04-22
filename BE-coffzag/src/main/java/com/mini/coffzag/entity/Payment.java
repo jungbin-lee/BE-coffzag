@@ -35,9 +35,13 @@ public class Payment extends Timestamped {
     @Column(name = "USER_ADDRESS")
     private String userAddress;             //PaymentRequestDto 로 받을 정보
 
+
+    //@OneToMany(fetch = FetchType.EAGER)
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "PRODUCT_INFO")
     private List<Long> productInfo;
+    //private List<Product> coffeeList;
+
 
     @Column(name = "TOTAL_PRICE")
     private Long totalPrice;                //PaymentRequestDto 로 받을 정보
@@ -49,6 +53,7 @@ public class Payment extends Timestamped {
         this.cart = cart;
         this.user = user;
         this.productInfo = productInfo;
+        //this.coffeeList = coffeeList;
         this.userPhone = paymentRequestDto.getUserPhone();
         this.userAddress = paymentRequestDto.getUserAddress();
         this.totalPrice = paymentRequestDto.getTotalPrice();

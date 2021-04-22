@@ -28,6 +28,11 @@ public class Review extends Timestamped{
     @Column
     private String contents;
 
+    //테이블 조인을 하자 흑흑
+//    @ManyToOne
+//    @JoinColumn(name = "COFFEE_ID")
+//    private Product product;
+
     public Review(ReviewDto reviewDto){
         this.coffeeId = reviewDto.getCoffeeId();
         this.username = reviewDto.getUsername();

@@ -22,7 +22,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
 
-        //메인 페이지 모든 커피, 페이징 및 정렬
+        //메인 페이지 모든 커피, 페이징
         public ReturnProduct getProducts(int page, int size) {
             // Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
             // Sort sort = Sort.by(direction, sortBy);
@@ -36,7 +36,7 @@ public class ProductService {
             for (Product product : productList){
                 Long coffeeId = product.getCoffeeId();
                 Review review = reviewRepository.findFirstByCoffeeIdOrderByModifiedAtDesc(coffeeId);
-                //coffeeId로 리뷰들을 찾고 생성시간이 가장 최근인 것
+                //coffeeId로 리뷰들을 찾고 수정시간이 가장 최근인 것
                 reviewList.add(review);
             }
 
@@ -46,26 +46,6 @@ public class ProductService {
             returnProduct.setReviews(reviewList);
             return returnProduct;
     }
-
-    //메인 페이지 모든 커피
-//    public ReturnProduct getProducts() {
-//        List<Product> productList = productRepository.findAll();
-//        List<Review> reviewList = new ArrayList<>();
-//
-//        for (Product product : productList){
-//            Long coffeeId = product.getCoffeeId();
-//            Review review = reviewRepository.findFirstByCoffeeIdOrderByModifiedAtDesc(coffeeId);
-//            //coffeeId로 리뷰들을 찾고 생성시간이 가장 최근인 것
-//            reviewList.add(review);
-//        }
-//
-//        ReturnProduct returnProduct = new ReturnProduct();
-//        returnProduct.setOk(true);
-//        returnProduct.setProducts(productList);
-//        returnProduct.setReviews(reviewList);
-//        return returnProduct;
-//    }
-
 
     //브랜드 별 커피
     public ReturnProduct getBrand(String coffeeBrand){
@@ -93,12 +73,4 @@ public class ProductService {
 
     }
 
-    //product 1개
-    public ReturnProduct getOneProduct(Long productId) {
-        Product product = productRepository.findByCoffeeId(productId).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 상품이 존재하지 않습니다.")
-        );
-        ReturnProduct returnProduct = new ReturnProduct(true, product);
-        return returnProduct;
-    }
 }
