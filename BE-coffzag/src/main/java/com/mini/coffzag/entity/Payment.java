@@ -22,12 +22,7 @@ public class Payment extends Timestamped {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CART_ID")
-    @JsonIgnore
     private Cart cart;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "USERNAME")
-    private User user;
 
     @Column(name = "USER_PHONE")
     private String userPhone;               //PaymentRequestDto 로 받을 정보
@@ -35,9 +30,9 @@ public class Payment extends Timestamped {
     @Column(name = "USER_ADDRESS")
     private String userAddress;             //PaymentRequestDto 로 받을 정보
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Column(name = "PRODUCT_INFO")
-    private List<Long> productInfo;
+    @OneToMany
+    @JoinColumn
+    private List<OrderHistory> orderHistories;
 
     @Column(name = "TOTAL_PRICE")
     private Long totalPrice;                //PaymentRequestDto 로 받을 정보
@@ -45,10 +40,9 @@ public class Payment extends Timestamped {
     @Column(name = "PAY_METHOD")
     private String payMethod;               //PaymentRequestDto 로 받을 정보
 
-    public Payment(Cart cart, User user, List<Long> productInfo, PaymentRequestDto paymentRequestDto) {
+    public Payment(Cart cart, List<OrderHistory> orderHistories, PaymentRequestDto paymentRequestDto) {
         this.cart = cart;
-        this.user = user;
-        this.productInfo = productInfo;
+        this.orderHistories = orderHistories;
         this.userPhone = paymentRequestDto.getUserPhone();
         this.userAddress = paymentRequestDto.getUserAddress();
         this.totalPrice = paymentRequestDto.getTotalPrice();
