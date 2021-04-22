@@ -17,7 +17,7 @@ public class CustomUserDetailService implements UserDetailsService { //db에서 
 
     private final UserRepository userRepository;
 
-    @Override
+    @Override//블로그에서는 이메일을 이용해찾지만 여기서는 Id를 통해 찾는다
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
                 .orElseThrow(

@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginDto {
-
+//로그인을 위한 username과 password
     @NotNull
     @Size(min = 3, max = 50)
     private String username;
