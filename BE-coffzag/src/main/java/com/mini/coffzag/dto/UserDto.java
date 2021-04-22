@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-
+//회원가입을 위한 정보 username,paddword,email의 길이와객체들
     @NotNull
     @Size(min = 3, max = 50)
     private String username;

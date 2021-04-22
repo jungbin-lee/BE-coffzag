@@ -18,8 +18,8 @@ public class PaymentService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
     private final OrderRepository orderRepository;
+    private final OrderHistoryRepository orderHistoryRepository;
     private final PaymentRepository paymentRepository;
-    private final ProductRepository productRepository;
 
     // 결제 페이지에 user 정보 전달
     @Transactional
@@ -35,7 +35,7 @@ public class PaymentService {
     // 결제 페이지에서 [결제하기] 버튼 클릭 시, new payment 생성
     @Transactional
     public ReturnMsg createPayment(PaymentRequestDto paymentRequestDto, User user) {
-        User userInfo = userRepository.findByUserId(user.getUserId()).orElseThrow(
+        userRepository.findByUserId(user.getUserId()).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
 
@@ -44,15 +44,14 @@ public class PaymentService {
         );
 
         List<Order> orderList = orderRepository.findByCart(cart);
-        List<Long> productInfo = new ArrayList<>();
-        //List<Product> coffeeList = new ArrayList<>();
-
+        List<OrderHistory> orderHistories = new ArrayList<>();
         for (Order order : orderList) {
-            Long coffeeId = order.getCoffee().getCoffeeId();
-            productInfo.add(coffeeId);
+            OrderHistory orderHistory = new OrderHistory(order.getCart(), order.getCoffee(), order.getOrderCnt());
+            orderHistories.add(orderHistory);
+            orderHistoryRepository.save(orderHistory);
         }
 
-        Payment newPayment = new Payment(cart, userInfo, productInfo, paymentRequestDto);
+        Payment newPayment = new Payment(cart, orderHistories, paymentRequestDto);
         paymentRepository.save(newPayment);
 
         ReturnMsg returnMsg = new ReturnMsg("결제 내역을 성공적으로 저장하였습니다.");
@@ -85,11 +84,16 @@ public class PaymentService {
                 () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
 
-        List<Payment> payments = paymentRepository.findByUser(user);
+        Cart cart = cartRepository.findByUser(user).orElseThrow(
+                () -> new IllegalArgumentException("해당 사용자의 장바구니가 존재하지 않습니다.")
+        );
+
+        List<Payment> payments = paymentRepository.findByCart(cart);
+
 
         ReturnMsg returnMsg = new ReturnMsg("해당 사용자의 payment 내역을 모두 조회했습니다.");
 
-        ReturnPayment returnPayment = new ReturnPayment(true, user, payments, returnMsg);
+        ReturnPayment returnPayment = new ReturnPayment(true, payments, returnMsg);
         return returnPayment;
     }
 

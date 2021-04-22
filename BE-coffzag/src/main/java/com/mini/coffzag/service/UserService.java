@@ -25,7 +25,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
 
-
+//회원가입 서비스
+    //userDto에 명시된 정보들을 새롭게 만들어 저장을합니다
+    //회원가입과 동시에 카트도 동시에 생성합니다
     public void createUser(UserDto userDto){
         User user = new User(userDto);
         userRepository.save(user);
@@ -34,7 +36,8 @@ public class UserService {
         cartRepository.save(cart);
     }
 
-
+//중복확인 서비스
+    //CheckId에 중복확인성공시 반환하는 객체들이 있다. 중복된 아이디가 있을경우 falsㄷ를 이용하여 오류를 내주고 그렇지 않으면 가능하다고 성공시켜줍니다.
     public ReturnCheckId checkId(UserDto userDto){
         ReturnCheckId returnCheckId = new ReturnCheckId();
         Optional<User> member = userRepository.findByUsername(userDto.getUsername());
@@ -48,7 +51,9 @@ public class UserService {
         return returnCheckId;
     }
 
-
+//로그인 서비스
+    //로그인 dto에 username과 password를 가지고 존재하는지 확인을 해줍니다 userrepository를 이용하여 db에서 체크
+    //존재하지 않거나 비밀번호가 맞지 않을시 오류를 내주고 그렇지 않을경우 토큰을 발행합니다.
     public ReturnUser login(LoginDto loginDto) {
         ReturnUser returnUser = new ReturnUser();
         try {

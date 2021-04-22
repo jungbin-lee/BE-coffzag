@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final CorsConfig corsConfig;
 
     private final JwtTokenProvider jwtTokenProvider;
-
+    //비밀번호 암호화를 위한 password encoder
     @Bean public BCryptPasswordEncoder encodePassword() { return new BCryptPasswordEncoder(); }
 
 
